@@ -1,6 +1,7 @@
 import React from 'react'
 import Button from '../Components/Button'
 import Field from '../Components/Field'
+import { Link } from 'react-router-dom'
 
 const SignIn = () => {
     return (
@@ -10,7 +11,7 @@ const SignIn = () => {
                     <div className="content flex flex-col items-center justify-center h-full gap-3">
                         <h1 className='md:text-5xl'>Welcome Back!</h1>
                         <p className='md:text-1xl font-light w-64 text-center'>To keep connected with us please login with your personal info</p>
-                        <Button text='Sign up' border={true} bg={false} />
+                        <Link to='/signin'><Button text='Sign up' border={true} bg={false} /></Link>
                     </div>
                 </div>
                 <div className="right md:w-2/4 w-full">
