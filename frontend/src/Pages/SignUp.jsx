@@ -21,7 +21,6 @@ const SignUp = () => {
     // Function to handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         // Validation: Ensure all fields are filled
         if (!userName || !email || !password || !confirmPassword) {
             setMessageState('info'); // Set message state to 'info' for an informational message
@@ -34,7 +33,6 @@ const SignUp = () => {
             }, 3000);
             return;
         }
-
         // Check if passwords match
         if (password !== confirmPassword) {
             setMessageState('warning'); // Set message state to 'warning'
