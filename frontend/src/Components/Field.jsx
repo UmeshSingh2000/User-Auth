@@ -8,7 +8,20 @@ const Field = ({ placeholder, value, changeFunc }) => {
         //     {inputType === 'email' ? <i className="fa-solid text-2xl  text-[#2A4747] fa-envelope"></i> : <i className="fa-solid text-2xl  text-[#2A4747] fa-lock"></i>}
         //     <input value={value} onChange={ (e)=>changeFunc(e.target.value)} type={inputType} className='bg-transparent border-none outline-none text-black w-full' placeholder={placeholder} />
         // </div>
-        <TextField className='w-2/3' onChange={ (e)=>changeFunc(e.target.value)} type={inputType} value={value} label={placeholder} variant="outlined" />
+        <TextField className='w-3/4' onChange={(e) => changeFunc(e.target.value)} type={inputType} value={value} label={placeholder} variant="outlined"
+            InputProps={{
+                style: {
+                    color: 'white',
+                    backgroundColor:'#05070A',
+                }
+            }}
+            InputLabelProps={{
+                style: {
+                    color: 'white',
+                    fontWeight : 100
+                }
+            }}
+        />
     )
 }
 

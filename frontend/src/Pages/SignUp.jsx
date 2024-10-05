@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Loader from '../Components/Loader';
 import Message from '../Components/Message';
+import google from '../assets/google.svg'
+import facebook from '../assets/facebook.svg'
 
 const SignUp = () => {
     // State for user input values
@@ -88,12 +90,12 @@ const SignUp = () => {
         <div>
             {/* Show message component if there's an error or feedback to display */}
             {error && <Message state={messageState} message={message} />}
-            <div className='w-screen h-screen items-center flex justify-center bg-sky-800'>
-                <div className='md:w-3/4 w-full h-3/4 text-white bg-white flex'>
+            <div className='w-screen h-screen items-center flex justify-center'>
+                <div className='md:w-1/3 w-full h-screen pt-8 pb-8 text-white bg-[#05070a66] border-[#222936] border flex rounded-md'>
                     {/* Sign Up Form */}
-                    <div className="right md:w-2/4 w-full">
+                    <div className="right md:w-full w-full">
                         <form onSubmit={handleSubmit} className='flex flex-col gap-3 items-center justify-center h-full'>
-                            <h1 className='text-[#439775] text-center font-medium text-4xl'>Sign up</h1>
+                            <h1 className='text-white font-medium text-4xl '>Sign up</h1>
                             {/* Field for entering username */}
                             <Field placeholder='Username' value={userName} changeFunc={setUserName} />
                             {/* Field for entering email */}
@@ -105,21 +107,32 @@ const SignUp = () => {
                             {/* Display loader when processing */}
                             {loading && <Loader />}
                             {/* Sign up button */}
+                            <div className='flex items-center justify-center gap-2'>
+                                <input className='h-5 w-5 ' type="checkbox" />
+                                <h2>I want to receive updates via email.</h2>
+                            </div>
                             <Button disable={buttonStatus} text='Sign up' border={false} bg={true} />
+                            <h2>Already have an account? <Link to='/' className='underline'>Sign in</Link></h2>
+                            <div className='flex border-[#222936] border gap-2 hover:bg-[#05070a66] transition duration-300 w-3/4 rounded cursor-pointer h-10 items-center justify-center'>
+                                <img src={google} alt="google" />
+                                <h2>Sign in with Google</h2>
+                            </div>
+                            <div className='flex border-[#222936] border gap-2 hover:bg-[#05070a66] transition duration-300 w-3/4 rounded cursor-pointer h-10 items-center justify-center'>
+                                <img src={facebook} alt="google" />
+                                <h2>Sign in with Facebook</h2>
+                            </div>
                         </form>
                     </div>
-
-                    {/* Section for additional content or links */}
-                    <div className="left md:block hidden w-2/4 bg-[#2A4747] h-full">
+                    {/* <div className="left md:block hidden w-2/4 bg-[#2A4747] h-full">
                         <div className="content flex flex-col items-center justify-center h-full gap-3">
                             <h1 className='md:text-5xl'>Create Your Account</h1>
                             <p className='md:text-1xl font-light w-64 text-center'>
                                 Register Your Account for Online service
                             </p>
-                            {/* Link to sign in page */}
+                            
                             <Link to='/'><Button text='Sign in' border={true} bg={false} /></Link>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>
