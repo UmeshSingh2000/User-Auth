@@ -50,7 +50,36 @@ const SignIn = () => {
         }
     }
     const googleLogin = useGoogleLogin({
-        
+        onSuccess: async (credentialResponse) => {
+            setLoading(true);
+            try {
+                const userInfoResponse = await axios('https://www.googleapis.com/oauth2/v2/userinfo', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${credentialResponse.access_token}`
+                    }
+                })
+                const { email, name } = userInfoResponse.data;
+                const res = await axios.post('http://localhost:3000/auth/user-login', { email, password: 'GoogleOAuth' })
+                setMessageState('success');
+                setError(true);
+                setMessage(res.data.message)
+                setTimeout(() => {
+                    setError(false);
+                }, 3000);
+            }
+            catch (err) {
+                setMessageState('error'); // Set message state to 'error'
+                setError(true); // Trigger error display
+                setMessage(err.response?.data?.msg || 'Error Signing in'); // Show error message
+                setTimeout(() => {
+                    setError(false); // Hide error after 3 seconds
+                }, 3000);
+            }
+            finally {
+                setLoading(false);
+            }
+        }
     })
     return (
         <div>
@@ -73,7 +102,7 @@ const SignIn = () => {
                             <Button text='Sign in' border={false} bg={true} />
                             {loading && <Loader />}
                             <h2>New User? <Link to='/signup' className='underline'>Sign up</Link></h2>
-                            <div className='flex border-[#222936] border gap-2 hover:bg-[#05070a66] transition duration-300 w-3/4 rounded cursor-pointer h-10 items-center justify-center'  onClick={googleLogin}>
+                            <div className='flex border-[#222936] border gap-2 hover:bg-[#05070a66] transition duration-300 w-3/4 rounded cursor-pointer h-10 items-center justify-center' onClick={googleLogin}>
                                 <img src={google} alt="google" />
                                 <h2>Sign in with Google</h2>
                             </div>
