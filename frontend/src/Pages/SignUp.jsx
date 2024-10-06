@@ -7,8 +7,11 @@ import Loader from '../Components/Loader';
 import Message from '../Components/Message';
 import google from '../assets/google.svg'
 import facebook from '../assets/facebook.svg'
+import { useGoogleLogin } from '@react-oauth/google';
+
 
 const SignUp = () => {
+
     // State for user input values
     const [userName, setUserName] = useState('');
     const [loading, setLoading] = useState(false); // Loading state for API request
@@ -19,37 +22,9 @@ const SignUp = () => {
     const [message, setMessage] = useState(''); // Message content for feedback
     const [buttonStatus, setButtonStatus] = useState(false); // Disable button during processing
     const [messageState, setMessageState] = useState('success') // Message state for styling (success, error, info, etc.)
-
-    // Function to handle form submission
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        // Validation: Ensure all fields are filled
-        if (!userName || !email || !password || !confirmPassword) {
-            setMessageState('info'); // Set message state to 'info' for an informational message
-            setError(true); // Trigger error display
-            setMessage('Please fill all fields'); // Display message
-            setButtonStatus(true); // Disable button during message display
-            setTimeout(() => {
-                setError(false); // Hide error after 3 seconds
-                setButtonStatus(false); // Re-enable the button
-            }, 3000);
-            return;
-        }
-        // Check if passwords match
-        if (password !== confirmPassword) {
-            setMessageState('warning'); // Set message state to 'warning'
-            setError(true); // Trigger error display
-            setMessage('Passwords do not match'); // Display mismatch message
-            setTimeout(() => {
-                setError(false); // Hide error after 3 seconds
-            }, 3000);
-            return;
-        }
-
-        // Set loading state and disable the button during API request
+    const handleApi = async () => {
         setLoading(true);
         setButtonStatus(true);
-
         try {
             // Make API request to register user
             const res = await axios.post('http://localhost:3000/auth/user-register', {
@@ -57,7 +32,6 @@ const SignUp = () => {
                 email,
                 password,
             });
-
             // If successful, show success message
             setMessageState('success'); // Set message state to 'success'
             setError(true); // Show success message
@@ -84,7 +58,73 @@ const SignUp = () => {
             setLoading(false);
             setButtonStatus(false);
         }
+    }
+    // Function to handle form submission
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        // Validation: Ensure all fields are filled
+        if (!userName || !email || !password || !confirmPassword) {
+            setMessageState('info'); // Set message state to 'info' for an informational message
+            setError(true); // Trigger error display
+            setMessage('Please fill all fields'); // Display message
+            setButtonStatus(true); // Disable button during message display
+            setTimeout(() => {
+                setError(false); // Hide error after 3 seconds
+                setButtonStatus(false); // Re-enable the button
+            }, 3000);
+            return;
+        }
+        // Check if passwords match
+        if (password !== confirmPassword) {
+            setMessageState('warning'); // Set message state to 'warning'
+            setError(true); // Trigger error display
+            setMessage('Passwords do not match'); // Display mismatch message
+            setTimeout(() => {
+                setError(false); // Hide error after 3 seconds
+            }, 3000);
+            return;
+        }
+        handleApi();
     };
+    const googleSignup = useGoogleLogin({
+        onSuccess: async (credentialResponse) => {
+            setLoading(true);
+            try {
+                const userInfoResponse = await axios('https://www.googleapis.com/oauth2/v2/userinfo', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${credentialResponse.access_token}`,
+                    },
+                });
+                const { email, name } = userInfoResponse.data;
+                const res = await axios.post('http://localhost:3000/auth/user-register', {
+                    username: name,
+                    email,
+                    password: 'GoogleOAuth'
+                });
+                setMessageState('success'); // Set message state to 'success'
+                setError(true); // Show success message
+                console.log(res.data.message); // Log the response message
+                setMessage(res.data.message || 'Registration successful'); // Display response message
+                setTimeout(() => {
+                    setError(false); // Hide message after 3 seconds
+                }, 3000);
+            } catch (err) {
+                setMessageState('error'); // Set message state to 'error'
+                setError(true); // Trigger error display
+                setMessage(err.response?.data?.msg || 'Error occurred during registration'); // Show error message
+                setTimeout(() => {
+                    setError(false); // Hide error after 3 seconds
+                }, 3000);
+            }
+            finally {
+                setLoading(false);
+            }
+        },
+        onError: (error) => {
+            console.error("Google Login Failed: ", error);
+        }
+    })
 
     return (
         <div>
@@ -113,7 +153,7 @@ const SignUp = () => {
                             </div>
                             <Button disable={buttonStatus} text='Sign up' border={false} bg={true} />
                             <h2>Already have an account? <Link to='/' className='underline'>Sign in</Link></h2>
-                            <div className='flex border-[#222936] border gap-2 hover:bg-[#05070a66] transition duration-300 w-3/4 rounded cursor-pointer h-10 items-center justify-center'>
+                            <div className='flex border-[#222936] border gap-2 hover:bg-[#05070a66] transition duration-300 w-3/4 rounded cursor-pointer h-10 items-center justify-center' onClick={googleSignup}>
                                 <img src={google} alt="google" />
                                 <h2>Sign in with Google</h2>
                             </div>

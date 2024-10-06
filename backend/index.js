@@ -6,7 +6,6 @@ require('dotenv').config()
 const port = process.env.PORT || 3000
 const userRoute = require('./Routes/userRoute')
 const dbConnect = require('./Config/dbConnect')
-
 //dbConnection
 dbConnect();
 app.use(express.json())
