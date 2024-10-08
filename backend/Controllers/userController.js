@@ -1,6 +1,6 @@
 const userModel = require('../Models/userModel')
 const bcrypt = require('bcrypt')
-
+const jwt = require('jsonwebtoken')
 
 //@desc create new user
 //@route POST /auth/user-register
@@ -51,12 +51,20 @@ const loginUser = async (req, res) => {
         if (!passMatch) {
             return res.status(400).json({ msg: 'Incorrect Password' })
         }
-        res.status(200).json({message:"Login Successfull"});
+        //create jwt token 
+        const token = jwt.sign({
+            id:isUser.id,username:isUser.username},
+            'jwt_secret',
+            {
+                expiresIn: '1m'
+            }
+        );
+        res.status(200).json({token:token,message:"Login Successfull"});
     }
     catch (err) {
         res.status(500).json({message:"Server error",error:err.message})
     }
 }
-    
+
 
 module.exports = { registerUser, loginUser }

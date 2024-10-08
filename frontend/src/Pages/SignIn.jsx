@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Button from '../Components/Button'
 import Field from '../Components/Field'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import Message from '../Components/Message'
 import Loader from '../Components/Loader'
@@ -9,12 +9,17 @@ import google from '../assets/google.svg'
 import facebook from '../assets/facebook.svg'
 import { useGoogleLogin } from '@react-oauth/google';
 const SignIn = () => {
+    const navigate = useNavigate();
     const [message, setMessage] = useState('');
     const [messageState, setMessageState] = useState('')
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const navigateToHomepage = (token) => {
+        if (token) localStorage.setItem('token', token);
+        navigate('/homepage')
+    }
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!email || !password) {
@@ -35,6 +40,8 @@ const SignIn = () => {
             setTimeout(() => {
                 setError(false);
             }, 3000);
+            const { token } = res.data;
+            navigateToHomepage(token);
         } catch (err) {
             setMessageState('error'); // Set message state to 'error'
             setError(true); // Trigger error display
@@ -67,6 +74,8 @@ const SignIn = () => {
                 setTimeout(() => {
                     setError(false);
                 }, 3000);
+                const { token } = res.data;
+                navigateToHomepage(token);
             }
             catch (err) {
                 setMessageState('error'); // Set message state to 'error'
