@@ -125,7 +125,6 @@ const SignUp = () => {
             console.error("Google Login Failed: ", error);
         }
     })
-
     return (
         <div>
             {/* Show message component if there's an error or feedback to display */}
