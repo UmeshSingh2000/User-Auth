@@ -6,9 +6,7 @@ import axios from 'axios';
 import Loader from '../Components/Loader';
 import Message from '../Components/Message';
 import google from '../assets/google.svg'
-import facebook from '../assets/facebook.svg'
 import { useGoogleLogin } from '@react-oauth/google';
-
 
 const SignUp = () => {
 
@@ -152,26 +150,17 @@ const SignUp = () => {
                             </div>
                             <Button disable={buttonStatus} text='Sign up' border={false} bg={true} />
                             <h2>Already have an account? <Link to='/' className='underline'>Sign in</Link></h2>
+                            <div className='flex w-2/3 gap-3 items-center justify-center'>
+                                <span className='w-2/4 h-0.5 bg-gray-600'></span>
+                                <p className=''>or</p>
+                                <span className='w-2/4 h-0.5 bg-gray-600'></span>
+                            </div>
                             <div className='flex border-[#222936] border gap-2 hover:bg-[#05070a66] transition duration-300 w-3/4 rounded cursor-pointer h-10 items-center justify-center' onClick={googleSignup}>
                                 <img src={google} alt="google" />
-                                <h2>Sign in with Google</h2>
-                            </div>
-                            <div className='flex border-[#222936] border gap-2 hover:bg-[#05070a66] transition duration-300 w-3/4 rounded cursor-pointer h-10 items-center justify-center'>
-                                <img src={facebook} alt="google" />
-                                <h2>Sign in with Facebook</h2>
+                                <h2>Sign up with Google</h2>
                             </div>
                         </form>
                     </div>
-                    {/* <div className="left md:block hidden w-2/4 bg-[#2A4747] h-full">
-                        <div className="content flex flex-col items-center justify-center h-full gap-3">
-                            <h1 className='md:text-5xl'>Create Your Account</h1>
-                            <p className='md:text-1xl font-light w-64 text-center'>
-                                Register Your Account for Online service
-                            </p>
-                            
-                            <Link to='/'><Button text='Sign in' border={true} bg={false} /></Link>
-                        </div>
-                    </div> */}
                 </div>
             </div>
         </div>

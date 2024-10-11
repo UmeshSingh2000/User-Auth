@@ -1,6 +1,7 @@
 const userModel = require('../Models/userModel')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const sendEmail = require('./mailer')
 
 //@desc create new user
 //@route POST /auth/user-register
@@ -53,18 +54,29 @@ const loginUser = async (req, res) => {
         }
         //create jwt token 
         const token = jwt.sign({
-            id:isUser.id,username:isUser.username},
+            id: isUser.id, username: isUser.username
+        },
             'jwt_secret',
             {
                 expiresIn: '1m'
             }
         );
-        res.status(200).json({token:token,message:"Login Successfull"});
+        res.status(200).json({ token: token, message: "Login Successfull" });
     }
     catch (err) {
-        res.status(500).json({message:"Server error",error:err.message})
+        res.status(500).json({ message: "Server error", error: err.message })
+    }
+}
+const recover = async (req, res) => {
+    const { email} = req.body
+    try {
+        await sendEmail(email)
+        res.status(200).json({ success: true, message: 'Email sent successfully!' });
+    }
+    catch (err) {
+        res.status(500).json({ success: false, message: 'Failed to send email.' });
     }
 }
 
 
-module.exports = { registerUser, loginUser }
+module.exports = { registerUser, loginUser, recover }
