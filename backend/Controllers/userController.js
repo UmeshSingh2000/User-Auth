@@ -68,15 +68,57 @@ const loginUser = async (req, res) => {
     }
 }
 const recover = async (req, res) => {
-    const { email} = req.body
+    const { email } = req.body
     try {
-        await sendEmail(email)
-        res.status(200).json({ success: true, message: 'Email sent successfully!' });
+        const isUser = await userModel.findOne({ email })
+        if (!isUser) {
+            return res.status(400).json({ msg: 'User not found' })
+        }
+        const otp = await sendEmail(email)
+        await userModel.updateOne({ email }, { otp, otpExpires: Date.now() + 10 * 60 * 1000 });
+        res.status(200).json({ success: true, message: 'Email sent successfully!', otp });
     }
     catch (err) {
         res.status(500).json({ success: false, message: 'Failed to send email.' });
     }
 }
+const checkOtp = async (req, res) => {
+    const { email, otp } = req.body
+    try {
+        const isUser = await userModel.findOne({ email })
+        if (!isUser) {
+            return res.status(400).json({ msg: 'User not found' })
+        }
+        if (otp != isUser.otp) {
+            return res.status(400).json({ msg: 'Invalid OTP' })
+        }
+        if (isUser.otpExpires < Date.now()) {
+            return res.status(400).json({ msg: 'OTP has expired' })
+        }
+        res.status(200).json({ message: "Account Verified" });
+
+    }
+    catch (err) {
+        res.status(500).json({ message: "Server error", error: err.message })
+    }
+}
+
+const updatePassword = async (req, res) => {
+    const { email, password } = req.body;
+    if (!email || !password) return res.status(400).json({ msg: "Please enter both email and password" });
+    try {
+        const isUser = await userModel.findOne({ email });
+        if (!isUser) return res.status(400).json({ msg: 'User not found' });
+        //update the password
+        const hashedPassword = await bcrypt.hash(password,10);
+        await userModel.updateOne({email},{password:hashedPassword});
+        res.status(200).json({ message: "Password updated successfully" });
+    }
+    catch (err) {
+        res.status(500).json({ message: "Server error", error: err.message })
+    }
+
+}
 
 
-module.exports = { registerUser, loginUser, recover }
+module.exports = { registerUser, loginUser, recover, checkOtp, updatePassword }

@@ -9,8 +9,9 @@ const transporter = nodemailer.createTransport({
     }
 });
 const sendEmail = async (to) => {
+    const otp = Math.floor(Math.random()*10000)+1;
     const subject = 'Recover Your Password';
-    const text = 'hello'
+    const text = `Enter this Otp to Recover Your Account: ${otp}`;
     const mailOption = {
         from: process.env.USER_EMAIL,
         to,
@@ -20,6 +21,7 @@ const sendEmail = async (to) => {
     try {
         const info = await transporter.sendMail(mailOption)
         console.log('Email sent: ' + info.response);
+        return otp;
     }
     catch (error) {
         console.error('Error sending email:', error);
