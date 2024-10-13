@@ -76,7 +76,7 @@ const recover = async (req, res) => {
         }
         const otp = await sendEmail(email)
         await userModel.updateOne({ email }, { otp, otpExpires: Date.now() + 10 * 60 * 1000 });
-        res.status(200).json({ success: true, message: 'Email sent successfully!', otp });
+        res.status(200).json({ success: true, message: 'Email sent successfully!'});
     }
     catch (err) {
         res.status(500).json({ success: false, message: 'Failed to send email.' });
