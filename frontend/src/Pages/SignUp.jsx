@@ -25,7 +25,7 @@ const SignUp = () => {
         setButtonStatus(true);
         try {
             // Make API request to register user
-            const res = await axios.post('http://localhost:3000/auth/user-register', {
+            const res = await axios.post('https://user-auth-24iy.onrender.com/auth/user-register', {
                 username: userName,
                 email,
                 password,
@@ -95,7 +95,7 @@ const SignUp = () => {
                     },
                 });
                 const { email, name } = userInfoResponse.data;
-                const res = await axios.post('http://localhost:3000/auth/user-register', {
+                const res = await axios.post('https://user-auth-24iy.onrender.com/auth/user-register', {
                     username: name,
                     email,
                     password: 'GoogleOAuth'

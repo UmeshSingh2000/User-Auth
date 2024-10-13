@@ -33,7 +33,7 @@ const SignIn = () => {
         }
         setLoading(true);
         try {
-            const res = await axios.post('http://localhost:3000/auth/user-login', { email, password })
+            const res = await axios.post('https://user-auth-24iy.onrender.com/auth/user-login', { email, password })
             setMessageState('success');
             setError(true);
             setMessage(res.data.message)
@@ -67,7 +67,7 @@ const SignIn = () => {
                     }
                 })
                 const { email, name } = userInfoResponse.data;
-                const res = await axios.post('http://localhost:3000/auth/user-login', { email, password: 'GoogleOAuth' })
+                const res = await axios.post('https://user-auth-24iy.onrender.com/auth/user-login', { email, password: 'GoogleOAuth' })
                 setMessageState('success');
                 setError(true);
                 setMessage(res.data.message)

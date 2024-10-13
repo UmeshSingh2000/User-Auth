@@ -43,7 +43,7 @@ const PasswordForget = () => {
         setMessage('Loading...')
         setMessageState('info')
         try {
-            const res = await axios.post('http://localhost:3000/auth/recover-password', { email })
+            const res = await axios.post('https://user-auth-24iy.onrender.com/auth/recover-password', { email })
             // console.log(res.data);
             if (res.data.success) setOtpButtonState(false);
             response = res.data;
@@ -76,7 +76,7 @@ const PasswordForget = () => {
         let response;
         setError(true);
         try {
-            const res = await axios.post('http://localhost:3000/auth/recover-password/verify-otp', { email, otp })
+            const res = await axios.post('https://user-auth-24iy.onrender.com/auth/recover-password/verify-otp', { email, otp })
             console.log(res.data);
             if (res.data) {
                 setOtpButtonState(true);
@@ -121,7 +121,7 @@ const PasswordForget = () => {
         setLoading(true)
         let response;
         try {
-            const res = await axios.post('http://localhost:3000/auth/updatePassword', { email, password })
+            const res = await axios.post('https://user-auth-24iy.onrender.com/updatePassword', { email, password })
             response = 'Password Changed Successfully'
             setMessageState('success')
         }
