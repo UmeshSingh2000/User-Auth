@@ -121,7 +121,7 @@ const PasswordForget = () => {
         setLoading(true)
         let response;
         try {
-            const res = await axios.post('https://user-auth-24iy.onrender.com/updatePassword', { email, password })
+            const res = await axios.post('https://user-auth-24iy.onrender.com/auth/updatePassword', { email, password })
             response = 'Password Changed Successfully'
             setMessageState('success')
         }
