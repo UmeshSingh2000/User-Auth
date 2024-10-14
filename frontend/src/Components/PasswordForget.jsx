@@ -63,6 +63,7 @@ const PasswordForget = () => {
         }
     }
     const verifyOtp = async () => {
+        setMessage('');
         if (!otp) {
             setError(true);
             setMessage('Otp Field is Empty')
@@ -98,6 +99,7 @@ const PasswordForget = () => {
         }
     }
     const handleUpdatePass = async () => {
+        setMessage('');
         if (!password || !confirmPassword) {
             setError(true);
             setMessage('Password Field is Empty')
